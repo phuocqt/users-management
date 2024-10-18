@@ -1,9 +1,11 @@
 package com.phuocqt.user_management.controller;
 
+import com.phuocqt.user_management.dto.request.ApiResponse;
 import com.phuocqt.user_management.dto.request.UserCreationRequest;
 import com.phuocqt.user_management.dto.request.UserUpdateRequest;
 import com.phuocqt.user_management.entity.User;
 import com.phuocqt.user_management.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    User createUser(@RequestBody UserCreationRequest request){
-        return userService.createUser(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request){
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(userService.createUser(request));
+
+        return apiResponse;
     }
 
     @GetMapping

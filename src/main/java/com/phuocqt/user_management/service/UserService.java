@@ -3,6 +3,8 @@ package com.phuocqt.user_management.service;
 import com.phuocqt.user_management.dto.request.UserCreationRequest;
 import com.phuocqt.user_management.dto.request.UserUpdateRequest;
 import com.phuocqt.user_management.entity.User;
+import com.phuocqt.user_management.exception.AppException;
+import com.phuocqt.user_management.exception.ErrorCode;
 import com.phuocqt.user_management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class UserService {
 
     public User createUser(UserCreationRequest request){
         User user = new User();
+
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXISTED);
 
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
